@@ -1,4 +1,4 @@
-QUnit.test("hello test", function(assert) {
+QUnit.test("shortest repetition test", function(assert) {
 
 
     assert.equal(solve('abcabcabcabc'), '3', "Passed!");
