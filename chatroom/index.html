@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>chatroom</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src='../bower_components/bootstrap/dist/bootstrap.min.js'></script>
+    <script src='chat.js'></script>
+</head>
+<body>
+
+    <div id="content" class="container">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Chat Room</div>
+            <div class="panel-body">
+                <div id="room"></div>
+                <div id="room-list"></div>
+                <div id="messages">....</div>
+            </div>
+        </div>
+
+
+
+        <form class="form-horizantal">
+
+            <div class="form-group input-group">
+                <input class='form-control' type="text" id="send-message" placeholder='type message here..' />
+                <span class='input-group-btn'>
+                    <button type="submit" class='btn btn-default' id="send-button">submit</button>
+                </span>
+            </div>
+
+            <div class='alert alert-info' role="alert" id="help">
+                <h4>Chat commnads</h4>
+                <p><strong>Change nickname</strong>: <kbd>/nick [username]</kbd></p>
+                <p><strong>Join/Create room</strong>: <kbd>/join [room name]</kbd></p>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
