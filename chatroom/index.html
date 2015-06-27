@@ -1,44 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>chatroom</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <script src='../bower_components/bootstrap/dist/bootstrap.min.js'></script>
-    <script src='chat.js'></script>
-</head>
-<body>
-
-    <div id="content" class="container">
-
-        <div class="panel panel-default">
-            <div class="panel-heading">Chat Room</div>
-            <div class="panel-body">
-                <div id="room"></div>
-                <div id="room-list"></div>
-                <div id="messages">....</div>
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>chatroom</title>
+        <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <script src='../bower_components/jquery/dist/jquery.min.js'></script>
+        <script src='../bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+        <script src='socket.io/socket.io.js'></script>
+        <!-- holy shit, it really load socket.io.js succeessfully-->
+        <script src='chat.js'></script>
+        <script src='chat_ui.js'></script>
+        <script>
+            //add client side socket io
+            var socket = io.connect();
+            
+            // in jQuery, putting function inside the $()
+            // means $(document).ready(..);
+            $(function(){
+                var chatApp = new Chat(socket);
+                
+                socket.on('nameResult', function(result){
+                    var message;
+                    
+                    if(result.success){
+                        message = 'You are now known as ' + result.name + '.';
+                    } else {
+                        message = result.message;
+                    }
+                    
+                    $('#messages').append(divSystemContentElement(message));
+                });
+                
+                socket.on('joinResult', function(result){
+                    $('#room').text(result.room);
+                    $('#messages').append(divSystemContentElement('Room changed'));
+                });
+                
+                socket.on('message', function(message){
+                    var newElement = $('<div></div>').text(message.text);
+                    $('#messages').append(newElement);
+                });
+                
+                socket.on('rooms', function(rooms){
+                    $('#room-list').empty();
+                    
+                    for(var room in rooms){
+                        room = room.substring(1, room.length);
+                        if(room != ''){
+                            $('#room-list').append(divEscapedContentElement(room));
+                        }
+                    }
+                    
+                    $('#room-list div').click(function(){
+                        chatApp.processCommnad('/join ' + $(this).text());
+                        $('#send-message').focus();
+                    });
+                });
+                
+                setInterval(function(){
+                    socket.emit('rooms');
+                }, 1000);
+                
+                $('#send-message').focus();
+                $('#send-form').submit(function(e){
+                    e.preventDefault();
+                    processUserInput(chatApp, socket);
+                    return false;
+                });
+                
+            });
+        </script>
+        <style>
+            #chatroom {
+                min-height: 500px;
+            }
+            
+            #room-list {
+                float: right;
+                width: 100px;
+                overflow: auto;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="content" class="container">
+            <div id='chatroom' class="panel panel-default">
+                <div class="panel-heading">Chat Room</div>
+                <div class="panel-body">
+                    <div id="room"></div>
+                    <div id="room-list"></div>
+                    <div id="messages">....</div>
+                </div>
             </div>
+            <form id='send-form' class="form-horizantal">
+                <div class="form-group input-group">
+                    <input class='form-control' type="text" id="send-message" placeholder='type message here..' />
+                    <span class='input-group-btn'>
+                        <button type="submit" class='btn btn-default' id="send-button">submit</button>
+                    </span>
+                </div>
+                <div class='alert alert-info' role="alert" id="help">
+                    <h4>Chat commnads</h4>
+                    <p>
+                        <strong>Change nickname</strong>:
+                        <kbd>/nick [username]</kbd>
+                    </p>
+                    <p>
+                        <strong>Join/Create room</strong>:
+                        <kbd>/join [room name]</kbd>
+                    </p>
+                </div>
+            </form>
         </div>
+    </body>
 
-
-
-        <form class="form-horizantal">
-
-            <div class="form-group input-group">
-                <input class='form-control' type="text" id="send-message" placeholder='type message here..' />
-                <span class='input-group-btn'>
-                    <button type="submit" class='btn btn-default' id="send-button">submit</button>
-                </span>
-            </div>
-
-            <div class='alert alert-info' role="alert" id="help">
-                <h4>Chat commnads</h4>
-                <p><strong>Change nickname</strong>: <kbd>/nick [username]</kbd></p>
-                <p><strong>Join/Create room</strong>: <kbd>/join [room name]</kbd></p>
-            </div>
-        </form>
-    </div>
-
-</body>
 </html>

@@ -21,7 +21,7 @@ Chat.prototype.processCommnad = function(commnad){
     // process the commnad nick and join
     
     var words = commnad.split(' ');
-    var command = wrods[0].substring(1, word[0].length).toLowerCase();
+    var command = words[0].substring(1, words[0].length).toLowerCase();
     
     var message = false;
     
@@ -44,4 +44,4 @@ Chat.prototype.processCommnad = function(commnad){
     }
     
     return message;
-}
+};

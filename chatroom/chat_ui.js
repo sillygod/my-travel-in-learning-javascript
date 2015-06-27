@@ -15,15 +15,16 @@ function processUserInput(chatApp, socket){
         systemMessage = chatApp.processCommnad(message);
         if(systemMessage){
             $('#messages').append(divSystemContentElement(systemMessage));
-        } else {
+        }
+    } else {
             chatApp.sendMessage($('#room').text(), message);
             $('#messages').append(divEscapedContentElement(message));
-            $('#message').scrollTop($('#message').prop('srollHeight'));
+            $('#messages').scrollTop($('#messages').prop('srollHeight'));
             // what is prop?
             // prop is something like attr. However
             // there are some different things between them
-        }
     }
+    
     
     $('#send-message').val('');
 }
