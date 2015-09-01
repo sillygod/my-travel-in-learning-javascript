@@ -1,0 +1,22 @@
+{
+  "name": "es6react",
+  "version": "1.0.0",
+  "description": "a test ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sillygod",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "babelify": "^6.3.0",
+    "browserify": "^11.0.1",
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.6",
+    "reactify": "^1.1.1",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
